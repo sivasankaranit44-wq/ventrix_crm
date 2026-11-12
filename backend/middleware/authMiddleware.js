@@ -14,7 +14,7 @@ exports.protect = async (req,res,next) =>{
         const token = header.split(" ")[1]
 
         // check the token is real and valid
-        const decoded = jwt.verify(token, process.env,JWT_SECRET)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         // find the user that token belongs to
         const user = await User.findById(decoded.id)
@@ -28,6 +28,7 @@ exports.protect = async (req,res,next) =>{
         // let the request continue
         next()
     } catch(error){
+        console.log("Auth error:", error.message)
         res.status(401).json({success:false, message:"Invalid token"})
     }
 }

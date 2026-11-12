@@ -23,7 +23,7 @@ exports.createLead = async(req,res) => {
         }) 
         res.status(201).json({success:true,lead})
     } catch(error){
-        res.status(500).json({succes:false, message:error.message})
+        res.status(500).json({success:false, message:error.message})
     } 
 } 
 
@@ -43,7 +43,7 @@ exports.getLeads=async(req,res)=>{
             filter.$or =[
                 {name:{$regex: req.query.search, $options:"i"}},
                 {email:{$regex:req.query.search, $options:"i"}},
-                {company:{$regex:req.query.company, $options:"i"}},
+                {company:{$regex:req.query.search, $options:"i"}},
             ];
         }
         // sorting 
@@ -89,6 +89,7 @@ exports.getLead = async(req,res)=>{
 // editing a lead and changing the status
 exports.updateLead = async(req,res)=>{
     try{
+        delete req.body.createdBy
         const lead = await Lead.findOneAndUpdate(
             {_id:req.params.id, createdBy:req.user._id},
             req.body,
@@ -100,7 +101,7 @@ exports.updateLead = async(req,res)=>{
         }
         res.json({success:true, lead})
     } catch(error){
-        res.status(500).json({success:true, message:error.message})
+        res.status(500).json({success:false, message:error.message})
     }
 }
 
@@ -108,7 +109,7 @@ exports.updateLead = async(req,res)=>{
 exports.deleteLead = async(req,res) =>{
     try{
         const lead = await Lead.findOneAndDelete(
-            {id:req.params.id, createdBy:req.user._id}
+            {_id:req.params.id, createdBy:req.user._id}
         )
         if(!lead){
             return res.status(404).json({success:false, message:"Lead not found"})
