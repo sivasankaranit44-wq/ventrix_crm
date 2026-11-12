@@ -22,7 +22,7 @@ app.get("/", (req,res)=>{
 app.use("/api/auth", require("./routes/authRoutes"))
 app.use("/api/leads", require("./routes/leadRoutes"))
 app.use("/api/customers", require("./routes/customerRoutes"))
-
+app.use("/api/dashboard",require("./routes/dashboardRoutes"))
 // mongoose connection
 const connectDB = async () =>{
     try {
