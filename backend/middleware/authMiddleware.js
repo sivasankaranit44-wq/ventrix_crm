@@ -3,6 +3,7 @@ const User = require("../models/userModel")
 
 // checks that user is logged in
 exports.protect = async (req,res,next) =>{
+    console.log("AUTH MIDDLEWARE REACHED:", req.method, req.originalUrl)
     try{
         // getting the token from the header
         const header = req.headers.authorization
